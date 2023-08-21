@@ -378,10 +378,10 @@ https://www.section.io/engineering-education/integrating-firebase-database-in-dj
 
 ## Configuring database for django:
 **Prerequisites to do:**
-1. figrue out how to migrate models to firebase
-2. figure out how to upload images/files to firebase
-3. figure out how to retrieve images/files from firebase
-4. figure out how to render retrieved images/files from firebase to django web app
+1. figrue out how to migrate models to firebase 
+2. figure out how to upload images/files to firebase. Solution: Simple external script using same credentials from config dictionary
+3. figure out how to retrieve images/files from firebase. Theory: get request with text/file as content-type
+4. figure out how to render retrieved images/files from firebase to django web app. 
 
 **To do:**
 1. 
