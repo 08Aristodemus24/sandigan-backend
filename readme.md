@@ -11,55 +11,13 @@
 8. if `pip` exists or install is done run `pip install -r requirements.txt` in the directory you are currently in
 9. once done installing you can run server by `python manage.py runserver`
 
+
+
 # This is the backend where phil-jurisprudence-recsys will be integrated, apart from being integrated in another web app which will be deployed. This is but a web app to personally integrate phil-jurisprudence-recsys to
 
+
+
 # Database Tasks
-## creating database for django:
-**Prerequisites to do:**
-1. https://console.firebase.google.com/ > "new project" > "<web icon>" > enter web app name > select add firebase as sdk "as npm install" > copy node.js code >
-```
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: os.environ['FIREBASE_API_KEY']
-  authDomain: os.environ['FIREBASE_AUTH_DOMAIN']
-  projectId: os.environ['FIREBASE_PROJECT_ID']
-  storageBucket: os.environ['FIREBASE_STORAGE_BUCKET']
-  messagingSenderId: os.environ['FIREBASE_MESSAGING_SENDER_ID']
-  appId: os.environ['FIREBASE_APP_ID']
-  measurementId: os.environ['FIREBASE_MEASUREMENT_ID']
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-```
-
-1. ... > F5 (refresh) > "see all build features" > "Realtime Database" > "Create Database" > select "United States (us-central1)" as default > next > select "Start in test mode" > "Enable" > 
-
-2. to create dummy data: hover over link below the link > "+" > enter key (name of key e.g. meta-data)  > "Add" > hover over meta-data > "+" > enter key (name of key e.g. app-name) & enter value (value e.g. sandigan-backend) > "Add" > hover over meta-data > "+" > enter key (name of key e.g. owner) & enter value (value e.g. LoneVagabond)
-
-3. once database is also created copy the link above the link we hovered onto earlier in order to add data to our database which is the `reference url` or the url of our database. Because it will be used later in our firebaseConfig dicitonary where we will add another key to this dicitonary called `databaseURL` and set it to the `reference url`
-```
-const firebaseConfig = {
-  apiKey: os.environ['FIREBASE_API_KEY'],
-  ...
-  databaseURL: os.environ['FIREBASE_DATABASE_URL'],
-  ...
-};
-```
-
-
-**Articles**
-https://www.section.io/engineering-education/integrating-firebase-database-in-django/
-
-
 ## configuring initial files for django:
 **Prerequisites to do:**
 1. 
@@ -68,7 +26,31 @@ https://www.section.io/engineering-education/integrating-firebase-database-in-dj
 1. activate environment by `conda activate sandigan-backend` 
 2. once in environment enter command `pip install pyrebase`
 3. in `<base directory>` enter command python manage.py startapp <name of app e.g. phil_juris_api>
-3. in `<base directory>/sandigan/settings.py` add string `'phil_juris_api'` in `INSTALLED_APPS` array
+4. in `<base directory>/sandigan/settings.py` add string `'phil_juris_api.apps.PhilJurisApiConfig'` in `INSTALLED_APPS` array
+5. copy and remove the SECRET_KEY value and place it in a separate .env file by declarign the variable SECRET_KEY and setting it to the copied value e.g. `SECRET_KEY='<some key>'`
+6. in `<base directory>/sandigan/settings.py` add the ff. also to ensure that we have access to the environment variables in our newly created `.env` file
+```
+from pathlib import Path
+
+# ff. imports are for getting secret values from .env file
+import os
+from dotenv import load_dotenv
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# specify path of .env file in which to access the secret values from
+# which is teh BASE_DIR where manage.py and requirements.txt live, 
+# then append the string .env using os.path.join()
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ['SECRET_KEY']
+```
+
 4. in `<base directory>/phil_juris_api/models.py` add the ff:
 ```
 from django.db import models
@@ -199,6 +181,7 @@ class AdvocateAdmin(BaseUserAdmin):
 # Register your models here.
 admin.site.register(Advocate, AdvocateAdmin)
 ```
+
 6. create `forms.py` in `<base directory>/phil_juris_api/` directory
 7. in `<base directory>/phil_juris_api/forms.py` add the ff:
 ```
@@ -260,9 +243,10 @@ class AdvocateChangeForm(forms.ModelForm):
 for the users outside the access of the admin page place custom forms here
 """
 ```
-7. in `<base directory>/sandigan/urls.py` add the a `path()` object with the arguments `"phil_juris_api/"` and `include('phil_juris_api.added_urls')` to the `urlpatterns` list. `path("phil_juris_api/", include('phil_juris_api.added_urls'))`
-8. in this file add the import: `from django.urls import include`
-9. in `<base directory>/phil_juris_api/views.py` add the ff:
+
+8. in `<base directory>/sandigan/urls.py` add the a `path()` object with the arguments `"phil_juris_api/"` and `include('phil_juris_api.added_urls')` to the `urlpatterns` list. `path("phil_juris_api/", include('phil_juris_api.added_urls'))`
+9. in this file add the import: `from django.urls import include`
+10. in `<base directory>/phil_juris_api/views.py` add the ff:
 ```
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -271,9 +255,9 @@ from django.http import HttpResponse
 def index(request):
     return HttpResponse("<h1>Philippine Jurisprudence API<h1>")
 ```
-10. 
-9. create `added_urls.py` in `<base directory>/phil_juris_api/` directory
-10. in the newly created `added_urls.py` add the ff:
+
+11. create `added_urls.py` in `<base directory>/phil_juris_api/` directory
+12. in the newly created `added_urls.py` add the ff:
 ```
 from django.urls import path
 from . import views
@@ -284,6 +268,113 @@ urlpatterns = [
     path('', views.index, name='test_index')
 ]
 ```
+
+13. 
+
+## creating database for django:
+**Prerequisites to do:**
+1. https://console.firebase.google.com/ > "new project" > "<web icon>" > enter web app name > select add firebase as sdk "as npm install" > copy node.js code >
+```
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "<some key>"
+  authDomain: "<some key>"
+  projectId: "<some key>"
+  storageBucket: "<some key>"
+  messagingSenderId: "<some key>"
+  appId: "<some key>"
+  measurementId: "<some key>"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+```
+
+2. ... > F5 (refresh) > "see all build features" > "Realtime Database" > "Create Database" > select "United States (us-central1)" as default > next > select "Start in test mode" > "Enable" > 
+
+3. because our database has now been created we copy each value associated with the keys of the dictionary in the code we copied earlier namely `apiKey`, `authDomain`, `projectId`, `storageBucket`, `messagingSenderId`, `appId`, `measurementId`, and declare new variables in our `.env` file that will respectively take in the values of these keys
+```
+FIREBASE_API_KEY="<some value>"
+FIREBASE_AUTH_DOMAIN="<some value>"
+FIREBASE_PROJECT_ID="<some value>"
+FIREBASE_STORAGE_BUCKET="<some value>"
+FIREBASE_MESSAGING_SENDER_ID="<some value>"
+FIREBASE_APP_ID="<some value>"
+FIREBASE_MEASUREMENT_ID="<some value>"
+```
+
+4. to create dummy data: hover over link below the link > "+" > enter key (name of key e.g. meta-data)  > "Add" > hover over meta-data > "+" > enter key (name of key e.g. app-name) & enter value (value e.g. sandigan-backend) > "Add" > hover over meta-data > "+" > enter key (name of key e.g. owner) & enter value (value e.g. LoneVagabond)
+
+5. once we've created and inserted dummy data for our database, copy the link above the link we hovered onto earlier in order to add data to our database which is the `reference url` or the url of our database. Because this will be added in our `.env` file to be eventually also used in a `config` dictionary we will create in our django app later, so we can access our firebase database. So in our `.env` file where we will add another variable called `FIREBASE_DATABASE_URL` and set it to the string of the `reference url` we copied earlier e.g. `FIREBASE_DATABASE_URL='<some value>'`
+
+6. because we already have most of our variables in our `.env` file we can declare and define our own dictionary in our django app particularly in the `<base directory>/phil_juris_api/views.py` file where the keys would be the same keys in the node.js code we copied earlier when we were creating our database, because that was actually a version of creating the `config` dictionary in order to use firebase for node.js, but we are in python so we have to declare also a dictionary in its syntax. Because we are also accessing the values assigned to the variables we declared in the `.env` file we created earlier to we also need to let django know that we will need to load again the directory where this `.env` file exists so we can access the `.env` file via the os module, and not access the environment variables in our system. To do this we just need to copy the same imports and statements we used earlier to load the variables in our `.env` file in order to access the secret key in our `<base directory>/sandigan/settings.py`
+```
+...
+from django.http import HttpResponse
+from pyrebase.pyrebase import initialize_app
+
+from pathlib import Path
+
+# ff. imports are for getting secret values from .env file
+import os
+from dotenv import load_dotenv
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+```
+
+7. after the series of statements above we now declare the config dictionary and define the keys and the values we need to access from the .env file
+```
+...
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+
+config = {
+    "apiKey": os.environ['FIREBASE_API_KEY'],
+    "authDomain": os.environ['FIREBASE_AUTH_DOMAIN'],
+    "databaseURL": os.environ['FIREBASE_DATABASE_URL'],
+    "projectId": os.environ['FIREBASE_PROJECT_ID'],
+    "storageBucket": os.environ['FIREBASE_STORAGE_BUCKET'],
+    "messagingSenderId": os.environ['FIREBASE_MESSAGING_SENDER_ID'],
+    "appId": os.environ['FIREBASE_APP_ID'],
+    "measurementId": os.environ['FIREBASE_MEASUREMENT_ID'],
+}
+
+firebase = initialize_app(config)
+auth = firebase.auth()
+database = firebase.database()
+```
+
+8. we can replace the earlier `index` view function we created earlier with this:
+```
+...
+database = firebase.database()
+
+# Create your views here.
+def index(request):
+    # retrieve data using keys of database since database
+    # is jsut a potentially large json file
+    owner = database.child('meta-data').child('owner').get().val()
+    app_name = database.child('meta-data').child('app-name').get().val()
+
+    sample_template = f"""
+    <h1>Philippine Jurisprudence API<h1>
+    <p>owner: {owner}<p>
+    <p>app name: {app_name}<p>
+    """
+    return HttpResponse(sample_template)
+```
+
+**Articles**
+https://www.section.io/engineering-education/integrating-firebase-database-in-django/
 
 ## Configuring database for django:
 **Prerequisites to do:**

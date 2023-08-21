@@ -1,3 +1,7 @@
+from django.shortcuts import render
+from django.http import HttpResponse
+from pyrebase.pyrebase import initialize_app
+
 from pathlib import Path
 
 # ff. imports are for getting secret values from .env file
@@ -7,11 +11,6 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(os.path.join(BASE_DIR, '.env'))
-
-
-from django.shortcuts import render
-from django.http import HttpResponse
-from pyrebase.pyrebase import initialize_app
 
 config = {
     "apiKey": os.environ['FIREBASE_API_KEY'],
@@ -27,7 +26,6 @@ config = {
 firebase = initialize_app(config)
 auth = firebase.auth()
 database = firebase.database()
-
 
 # Create your views here.
 def index(request):
