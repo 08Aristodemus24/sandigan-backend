@@ -45,11 +45,22 @@ const analytics = getAnalytics(app);
 
 2. to create dummy data: hover over link below the link > "+" > enter key (name of key e.g. meta-data)  > "Add" > hover over meta-data > "+" > enter key (name of key e.g. app-name) & enter value (value e.g. sandigan-backend) > "Add" > hover over meta-data > "+" > enter key (name of key e.g. owner) & enter value (value e.g. LoneVagabond)
 
+3. once database is also created copy the link above the link we hovered onto earlier in order to add data to our database which is the `reference url` or the url of our database. Because it will be used later in our firebaseConfig dicitonary where we will add another key to this dicitonary called `databaseURL` and set it to the `reference url`
+```
+const firebaseConfig = {
+  apiKey: os.environ['FIREBASE_API_KEY'],
+  ...
+  databaseURL: os.environ['FIREBASE_DATABASE_URL'],
+  ...
+};
+```
+
+
 **Articles**
 https://www.section.io/engineering-education/integrating-firebase-database-in-django/
 
 
-## configuring database for django:
+## configuring initial files for django:
 **Prerequisites to do:**
 1. 
 
@@ -274,11 +285,18 @@ urlpatterns = [
 ]
 ```
 
+## Configuring database for django:
+**Prerequisites to do:**
+1. figrue out how to migrate models to firebase
+2. how to upload images/files to firebase
+3. retrieving images/files from firebase
+4. rendering retrieved images/files from firebase to django web app
 
+**To do:**
+1. 
+2. 
 
-
-
-**Articles**
+**Articles:**
 1. https://www.section.io/engineering-education/integrating-firebase-database-in-django/
 2. https://docs.djangoproject.com/en/4.2/topics/auth/customizing/ *important*
 

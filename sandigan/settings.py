@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    "phil_juris_api",
+    "phil_juris_api.apps.PhilJurisApiConfig",
 ]
 
 MIDDLEWARE = [
