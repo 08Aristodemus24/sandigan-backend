@@ -76,9 +76,12 @@ def upload_juris_docs(juris_meta: pd.DataFrame, storage: Storage) -> None:
 
 def upload_juris_docs_concurrently(data: np.ndarray, storage: Storage):
     """
-    takes an array of the columns of the converted DataFrame
+    Takes an array of the columns of the converted DataFrame
     and runs a concurrent process of uploading each row to
     firebase storage
+
+    Note: this function is virtually much faster than using
+    .apply in pandas
     """
 
     def helper(row):
