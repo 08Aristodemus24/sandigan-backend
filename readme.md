@@ -1,5 +1,11 @@
 # **Still In Production**
 
+
+
+# This is the backend where phil-jurisprudence-recsys will be integrated, apart from being integrated in another web app which will be deployed. This is but a web app to personally integrate phil-jurisprudence-recsys to
+
+
+
 # Usage:
 1. clone repository with `git clone https://github.com/08Aristodemus24/sandigan-backend.git`
 2. navigate to directory with manage.py file and requirements.txt file
@@ -10,10 +16,6 @@
 7. if it is there then move to step 8, if not then install `pip` by typing `conda install pip`
 8. if `pip` exists or install is done run `pip install -r requirements.txt` in the directory you are currently in
 9. once done installing you can run server by `python manage.py runserver`
-
-
-
-# This is the backend where phil-jurisprudence-recsys will be integrated, apart from being integrated in another web app which will be deployed. This is but a web app to personally integrate phil-jurisprudence-recsys to
 
 
 
@@ -378,8 +380,8 @@ https://www.section.io/engineering-education/integrating-firebase-database-in-dj
 
 ## Configuring database for django:
 **Prerequisites to do:**
-1. figrue out how to migrate models to firebase 
-2. figure out how to upload images/files to firebase. Solution: Simple external script using same credentials from config dictionary
+1. figure out how to migrate models to firebase 
+2. <s>figure out how to upload images/files to firebase. Solution: Simple external script using same credentials from config dictionary</s>
 3. figure out how to retrieve images/files from firebase. Theory: get request with text/file as content-type
 4. figure out how to render retrieved images/files from firebase to django web app. 
 
